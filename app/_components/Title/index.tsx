@@ -1,7 +1,11 @@
+import styles from "./index.module.css";
+
 export default function Title() {
   return (
     <>
-      <h1>Title</h1>
+      <header className={styles.title}>
+        <h1>Todo App</h1>
+      </header>
     </>
   );
 }
