@@ -13,7 +13,7 @@ export const todolist = [
   {
     id: 2,
     title: "test2",
-    done: false,
+    done: true,
   },
   {
     id: 3,
@@ -23,7 +23,7 @@ export const todolist = [
   {
     id: 4,
     title: "test4",
-    done: false,
+    done: true,
   },
   {
     id: 5,
@@ -33,6 +33,6 @@ export const todolist = [
   {
     id: 6,
     title: "test6",
-    done: false,
+    done: true,
   },
 ];

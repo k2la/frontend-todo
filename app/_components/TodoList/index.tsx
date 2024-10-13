@@ -1,35 +1,51 @@
 "use client";
 
 import Todo from "@/app/_components/Todo";
-import styles from "./index.module.css";
-import { Box } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import { List } from "@mui/material";
 import { TodoType } from "@/app/_utils/data";
+import { TASKS } from "@/app/_api/tasks";
 
 type Props = {
   todolist: TodoType[];
 };
 
 export default function TodoList({ todolist }: Props) {
-  const size = { xs: 6, md: 4, lg: 3 };
-  const onUpdate = (
+  const add = async (
     e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const newTitle: string = e.target.value;
-    console.log(newTitle);
+    await TASKS.add(e.target.value);
   };
+
+  const update = async (
+    todo: TodoType,
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    await TASKS.update({
+      id: todo.id,
+      title: e.target.value,
+      done: todo.done,
+    });
+  };
+
+  const remove = async (id: number) => {
+    console.log("remove");
+    await TASKS.remove(id);
+  };
+
+  const complete = async (id: number) => {
+    console.log("complete");
+    await TASKS.complete(id);
+  };
+
+  const api = { add, update, remove, complete };
 
   return (
     <>
-      <Box className={styles.todoList}>
-        <Grid container spacing={{ xs: 1, md: 2, lg: 3 }} width="70%">
-          {todolist.map((todo) => (
-            <Grid size={size} key={todo.id}>
-              <Todo todo={todo} update={onUpdate} />
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
+      <List>
+        {todolist.map((todo) => (
+          <Todo key={todo.id} todo={todo} api={api} />
+        ))}
+      </List>
     </>
   );
 }
