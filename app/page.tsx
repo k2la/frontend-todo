@@ -1,9 +1,9 @@
 import Title from "@/app/_components/Title";
 import TodoList from "@/app/_components/TodoList";
-import { getAll } from "./_api/todo";
+import { TASKS } from "./_api/tasks";
 
 export default async function Home() {
-  const todolist = await getAll();
+  const todolist = await TASKS.getAll();
   return (
     <>
       <Title />
