@@ -1,8 +1,9 @@
 import Title from "@/app/_components/Title";
 import TodoList from "@/app/_components/TodoList";
-import { todolist } from "@/app/_utils/data";
+import { getAll } from "./_api/todo";
 
-export default function Home() {
+export default async function Home() {
+  const todolist = await getAll();
   return (
     <>
       <Title />
