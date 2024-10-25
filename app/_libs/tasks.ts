@@ -2,13 +2,17 @@ import { API_SERVER_URL, todolist, TodoType } from "@/app/_utils/data";
 // import { API_SERVER_URL } from "../_utils/data";
 
 // すべてのTODOの取得
-async function getAll() {
-  // const todos = await fetch(API_SERVER_URL + "/tasks");
-  return todolist;
+async function getAll(): Promise<TodoType[]> {
+  // try {
+  //   const todos = await fetch(API_SERVER_URL + "/tasks");
+  // } catch (e) {
+  //   return [];
+  // }
+  return todolist as TodoType[];
 }
 
-async function add(title: string) {
-  await fetch(API_SERVER_URL + `/tasks/`, {
+async function add(title: string): Promise<TodoType> {
+  const res = await fetch(API_SERVER_URL + `/tasks/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -17,6 +21,12 @@ async function add(title: string) {
       title,
     }),
   });
+  const newTodo: TodoType = {
+    id: 1000,
+    title: "new",
+    done: false,
+  };
+  return newTodo;
 }
 
 // TODOの内容の更新
@@ -28,7 +38,7 @@ async function update(todo: TodoType) {
     },
     body: JSON.stringify({
       title: todo.title,
-      // done: todo.done,
+      done: todo.done,
     }),
   });
 }
