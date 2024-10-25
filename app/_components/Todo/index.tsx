@@ -12,13 +12,7 @@ import { useState } from "react";
 type Props = {
   todo: TodoType;
   api: {
-    add(
-      e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
-    ): Promise<void>;
-    update(
-      todo: TodoType,
-      e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
-    ): Promise<void>;
+    update(todo: TodoType): Promise<void>;
     remove(id: number): Promise<void>;
     complete(id: number): Promise<void>;
   };
@@ -36,6 +30,12 @@ export default function Todo({ todo, api }: Props) {
     };
     setTodoItem(newTodo);
   };
+  const handleBlur = async () => {
+    await api.update(todoItem);
+  };
+  const remove = async () => {
+    await api.remove(todoItem.id);
+  };
 
   return (
     <>
@@ -43,7 +43,7 @@ export default function Todo({ todo, api }: Props) {
         <ListItemAvatar>
           <Avatar
             sx={{ bgcolor: todo.done ? "green" : "grey" }}
-            onClick={api.complete}
+            onClick={() => api.complete(todo.id)}
           >
             <CheckIcon />
           </Avatar>
@@ -52,9 +52,10 @@ export default function Todo({ todo, api }: Props) {
           variant="standard"
           value={todoItem.title}
           onChange={handleChange}
+          onBlur={handleBlur}
         />
         <IconButton aria-label="delete">
-          <DeleteIcon />
+          <DeleteIcon onClick={remove} />
         </IconButton>
       </ListItem>
     </>

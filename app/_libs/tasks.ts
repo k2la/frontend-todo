@@ -11,8 +11,8 @@ async function getAll(): Promise<TodoType[]> {
   return todolist as TodoType[];
 }
 
-async function add(title: string) {
-  await fetch(API_SERVER_URL + `/tasks/`, {
+async function add(title: string): Promise<TodoType> {
+  const res = await fetch(API_SERVER_URL + `/tasks/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -21,6 +21,12 @@ async function add(title: string) {
       title,
     }),
   });
+  const newTodo: TodoType = {
+    id: 1000,
+    title: "new",
+    done: false,
+  };
+  return newTodo;
 }
 
 // TODOの内容の更新

@@ -1,40 +1,54 @@
 "use client";
-
 import Todo from "@/app/_components/Todo";
 import { List } from "@mui/material";
 import { TodoType } from "@/app/_utils/data";
-import { TASKS } from "@/app/_api/tasks";
-
+import { TASKS } from "@/app/_libs/tasks";
+import TodoForm from "../TodoForm";
+import { useState } from "react";
 type Props = {
   todolist: TodoType[];
 };
 
 export default function TodoList({ todolist }: Props) {
-  const add = async (
-    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    await TASKS.add(e.target.value);
+  const [list, setList] = useState<TodoType[]>(todolist);
+  const add = async (title: string) => {
+    try {
+      const newTodo: TodoType = await TASKS.add(title);
+      setList([...list, newTodo]);
+      console.log(newTodo);
+    } catch (e) {}
   };
 
-  const update = async (
-    todo: TodoType,
-    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    await TASKS.update({
-      id: todo.id,
-      title: e.target.value,
-      done: todo.done,
-    });
+  const update = async (todo: TodoType) => {
+    try {
+      console.log("update");
+      await TASKS.update({
+        id: todo.id,
+        title: todo.title,
+        done: todo.done,
+      });
+    } catch (e) {}
   };
 
   const remove = async (id: number) => {
-    console.log("remove");
-    await TASKS.remove(id);
+    try {
+      await TASKS.remove(id);
+    } catch (e) {}
+    setList(list.filter((todo) => todo.id !== id));
   };
 
   const complete = async (id: number) => {
-    console.log("complete");
-    await TASKS.complete(id);
+    try {
+      console.log("complete");
+      await TASKS.complete(id);
+      setList(
+        list.map((todo) =>
+          todo.id === id
+            ? { ...todo, title: todo.title, done: !todo.done }
+            : todo
+        )
+      );
+    } catch (e) {}
   };
 
   const api = { add, update, remove, complete };
@@ -42,9 +56,10 @@ export default function TodoList({ todolist }: Props) {
   return (
     <>
       <List>
-        {todolist.map((todo) => (
+        {list.map((todo) => (
           <Todo key={todo.id} todo={todo} api={api} />
         ))}
+        <TodoForm api={api} />
       </List>
     </>
   );
